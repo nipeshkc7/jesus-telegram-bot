@@ -1,0 +1,32 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: A serverless function that listens to incoming webhooks from the Telegram
+  Server
+Resources:
+  Jesus:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: Jesus/index.handler
+      Runtime: nodejs14.x
+      Events:
+        TelegramServiceAPI:
+          Type: Api
+          Properties:
+            Path: /message
+            Method: GET
+      CodeUri: s3://jesus-deployement-bucket/15bac780a42fa136367e139518996d42
+    Metadata:
+      SamResourceId: Jesus
+  JesusInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+        - Jesus
+        - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Sub: arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:*/*/*/*
+    Metadata:
+      SamResourceId: JesusInvokePermission
