@@ -12,7 +12,7 @@ Resources:
           Type: Api
           Properties:
             Path: /message
-            Method: GET
+            Method: POST
   JesusInvokePermission:
     Type: AWS::Lambda::Permission
     Properties:
