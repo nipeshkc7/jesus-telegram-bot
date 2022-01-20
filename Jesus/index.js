@@ -1,6 +1,6 @@
 exports.handler = (event, context, callback) => {
 
-    console.log(event);
+    console.log(event.body);
 
     const response = {
         statusCode: 200,
