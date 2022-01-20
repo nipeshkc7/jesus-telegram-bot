@@ -14,7 +14,7 @@ Resources:
           Properties:
             Path: /message
             Method: POST
-      CodeUri: s3://jesus-deployement-bucket/ce0cba43633e6a02e83e00c139c0fa7e
+      CodeUri: s3://jesus-deployement-bucket/131b5295644cdf0845b28187103ad137
     Metadata:
       SamResourceId: Jesus
   JesusInvokePermission:

@@ -1,0 +1,26 @@
+{
+  "name": "telegram-bot-server",
+  "version": "1.0.0",
+  "description": "A telegram bot that helps you split you grocery bills.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nipeshkc7/jesus-telegram-bot.git"
+  },
+  "keywords": [
+    "telegram",
+    "bot"
+  ],
+  "author": "Arpan Kc",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nipeshkc7/jesus-telegram-bot/issues"
+  },
+  "homepage": "https://github.com/nipeshkc7/jesus-telegram-bot#readme",
+  "dependencies": {
+    "axios": "^0.25.0"
+  }
+}
