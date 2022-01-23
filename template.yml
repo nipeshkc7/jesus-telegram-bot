@@ -7,6 +7,12 @@ Resources:
     Properties:
       Handler:  Jesus/index.handler
       Runtime: nodejs14.x
+      Environment:
+        Variables:
+          TABLE_NAME: people
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref PeopleRecords
       Events:
         TelegramServiceAPI:
           Type: Api
@@ -24,3 +30,16 @@ Resources:
       Principal: apigateway.amazonaws.com
       SourceArn:
         Fn::Sub: arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:*/*/*/*
+  PeopleRecords:
+    Type: AWS::DynamoDB::Table
+    Properties: 
+      TableName: People
+      AttributeDefinitions: 
+        - AttributeName: id
+          AttributeType: S
+      KeySchema: 
+        - AttributeName: id
+          KeyType: HASH
+      ProvisionedThroughput: 
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
