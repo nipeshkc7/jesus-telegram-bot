@@ -8,13 +8,20 @@ Resources:
     Properties:
       Handler: Jesus/index.handler
       Runtime: nodejs14.x
+      Environment:
+        Variables:
+          TABLE_NAME: people
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: PeopleRecords
       Events:
         TelegramServiceAPI:
           Type: Api
           Properties:
             Path: /message
             Method: POST
-      CodeUri: s3://jesus-deployement-bucket/131b5295644cdf0845b28187103ad137
+      CodeUri: s3://jesus-deployement-bucket/39e775b6caeda35db4e3b456b1d3a819
     Metadata:
       SamResourceId: Jesus
   JesusInvokePermission:
@@ -30,3 +37,18 @@ Resources:
         Fn::Sub: arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:*/*/*/*
     Metadata:
       SamResourceId: JesusInvokePermission
+  PeopleRecords:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: People
+      AttributeDefinitions:
+      - AttributeName: id
+        AttributeType: S
+      KeySchema:
+      - AttributeName: id
+        KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+    Metadata:
+      SamResourceId: PeopleRecords
