@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/nipeshkc7/jesus-telegram-bot#readme",
   "dependencies": {
+    "aws-sdk": "^2.1062.0",
     "axios": "^0.25.0"
   }
 }
