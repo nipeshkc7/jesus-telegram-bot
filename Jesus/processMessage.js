@@ -1,18 +1,23 @@
-function divideBills(purchase, peopleRecord){
+function divideBills(purchase, peopleRecord) {
     let people = { ...peopleRecord };
+
+    if(!people[purchase.spender]) {
+        people[purchase.spender] = {spent: 0, owes: {}};
+    }
+
     let peopleNames = Object.keys(people);
     peopleNames.forEach(person => {
-        if(person === purchase.spender) {
+        if (person === purchase.spender) {
             people[person].spent = people[person].spent + purchase.amount;
         } else {
-            people[person].owes[purchase.spender] = people[person].owes[purchase.spender]?people[person].owes[purchase.spender]: 0 + (purchase.amount / peopleNames.length);
-            people[person].owes = people[person].owes?people[person].owes:{};
+            people[person].owes[purchase.spender] = people[person].owes[purchase.spender] ? people[person].owes[purchase.spender] : 0 + (purchase.amount / peopleNames.length);
+            people[person].owes = people[person].owes ? people[person].owes : {};
         }
     })
     return people;
 }
 
-function balanceBills(peopleRecord){
+function balanceBills(peopleRecord) {
     let people = { ...peopleRecord };
     let peopleNames = Object.keys(people);
     peopleNames.forEach(person => {
@@ -21,10 +26,10 @@ function balanceBills(peopleRecord){
             if (people[person].owes[personOwed] === 0) {
                 return;
             }
-            if (people[person].owes[personOwed] >= people[personOwed].owes[person]){
+            if (people[person].owes[personOwed] >= people[personOwed].owes[person]) {
                 people[person].owes[personOwed] = people[person].owes[personOwed] - people[personOwed].owes[person];
                 people[personOwed].owes[person] = 0;
-            } else if (people[personOwed].owes[person] > people[person].owes[personOwed]){
+            } else if (people[personOwed].owes[person] > people[person].owes[personOwed]) {
                 people[personOwed].owes[person] = people[personOwed].owes[person] - people[person].owes[personOwed];
                 people[person].owes[personOwed] = 0;
             }
@@ -33,51 +38,39 @@ function balanceBills(peopleRecord){
     return people;
 }
 
-function clearBills(tpeople, person){
-    let people = { ...tpeople }; 
+function clearBills(peopleRecord, person) {
+    let people = { ...peopleRecord };
     people[person].owes = {};
     return people;
 }
 
-function processMessage(message, people) {
-    // get amount
-    switch (message.text.toLowerCase()) {
-        case '':
-            divideBills(purchase, people)
-            balanceBills(message, people);
-            return {
-                text: ''
-            }
-        case '':
-            clearBills(people, person);
-            return {
-                text: ''
-            }
-        case '':
-            return
-        // case 'oi':
-        //     return {
-        //         text: `aah k vo ${message.from.first_name}`,
-        //         gif: "what's up"
-        //     };
-        // case 'k cha':
-        //     return {
-        //         text: `aah thikai cha ${message.from.first_name}, timro k cha`,
-        //         gif: "how are you doing"
-        //     };
-        // case 'thikai cha':
-        //     return {
-        //         text: `lala`,
-        //         gif: "whatever"
-        //     };
-        default:
-            return {
-                text: `k vanya bujina`,
-                gif: "confused"
-            };
-    }
+const regexMap = {
+    'amountSpent': /jesus\si\sspent\s([0-9]+)\sdollars\son.+/gmi,
 }
 
-module.exports = {
-    processMessage
-};
+function processMessage(message, people) {
+    if(!message.user) throw new Error('no user');
+    if(!message.text) throw new Error('no text message');
+    const messageText = message.text;
+
+    //Example message: "jesus is spent 100 dollars on food"
+    if(/jesus\si\sspent\s(\d+((.)|(.\d{0,2})?))\sdollars\son.+/gmi.exec(messageText)?.length) {
+        const amountSpent = /jesus\si\sspent\s(\d+((.)|(.\d{0,2})?))\sdollars\son.+/gmi.exec(messageText)[1];
+        const peopleRecord = balanceBills(divideBills({ spender: message.user, amount: Number(amountSpent) }, people));
+        return {
+            peopleRecord,
+            reply: '',
+            gif: ''
+        }
+    }
+
+    //Example message: "jesus i cleared my bills"
+    if(/jesus\si\scleared\smy\sbills/gmi.exec(messageText)?.length) {
+        const peopleRecord = clearBills(people, message.user);
+        return {
+            peopleRecord,
+            reply: '',
+            gif: ''
+        }
+    }
+}
