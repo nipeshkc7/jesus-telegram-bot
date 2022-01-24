@@ -1,4 +1,47 @@
 const axios = require('axios');
+const AWS = require('aws-sdk');
+const docClient = new AWS.DynamoDB.DocumentClient();
+const tableName = process.env.TABLE_NAME;
+
+async function createItem(item) {
+    // const params = {
+    //     TableName: 'People',
+    //     Item: {
+    //         id: '12345',
+    //         price: 100.00
+    //     }
+    // }
+
+    try {
+        await docClient.put({
+            TableName: tableName,
+            Item: item
+        }).promise();
+
+    } catch (err) {
+        console.error(`Error Creating Item ${err.message}`);
+        console.log(err);
+        return err;
+    }
+}
+
+async function getItem(id) {
+    // const params = {
+    //     TableName: 'People',
+    //     Key: {
+    //         id: '1'
+    //     }
+    // };
+
+    const data = await docClient.get({
+        TableName: tableName,
+        Key: {
+            id: id
+        }
+    }).promise();
+
+    return data.Item.message;
+}
 
 exports.handler = async (event, context, callback) => {
 
