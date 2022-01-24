@@ -67,29 +67,3 @@ exports.handler = async (event, context, callback) => {
 
 };
 
-function processMessage(message) {
-    // get amount
-    switch (message.text.toLowerCase()) {
-        case 'oi':
-            return {
-                text: `aah k vo ${message.from.first_name}`,
-                gif: "what's up"
-            };
-        case 'k cha':
-            return {
-                text: `aah thikai cha ${message.from.first_name}, timro k cha`,
-                gif: "how are you doing"
-            };
-        case 'thikai cha':
-            return {
-                text: `lala`,
-                gif: "whatever"
-            };
-        default:
-            return {
-                text: `k vanya bujina`,
-                gif: "confused"
-            };
-    }
-}
-
