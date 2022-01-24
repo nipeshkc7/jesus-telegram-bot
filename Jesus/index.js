@@ -46,12 +46,13 @@ async function getItem(id) {
 exports.handler = async (event, context, callback) => {
 
     const body = JSON.parse(event.body);
-    const reply = processMessage(body.message);
+    const peopleRecord = await getItem(body.message.chatId);
+    const { peopleRecords, reply, gif } = processMessage(body.message, peopleRecords);
 
     try {
-        await axios.get(`https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/sendMessage?chat_id=${body.message.chat.id}&text=${encodeURI(reply.text)}`)
-        if(reply.gif) {
-            const gif = await axios.get(`https://g.tenor.com/v1/random?key=${process.env.TENOR_KEY}&q=${encodeURI(reply.gif)}&limit=1`);
+        await axios.get(`https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/sendMessage?chat_id=${body.message.chat.id}&text=${encodeURI(reply)}`)
+        if(gif) {
+            const gif = await axios.get(`https://g.tenor.com/v1/random?key=${process.env.TENOR_KEY}&q=${encodeURI(gif)}&limit=1`);
             await axios.get(`https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/sendAnimation?chat_id=${body.message.chat.id}&animation=${encodeURI(gif.data.results[0].media[0].gif.url)}`)
         }
     } catch (e) {
