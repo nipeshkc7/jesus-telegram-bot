@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 function divideBills(purchase, peopleRecord) {
     let people = { ...peopleRecord };
 
@@ -10,7 +12,7 @@ function divideBills(purchase, peopleRecord) {
         if (person === purchase.spender) {
             people[person].spent = people[person].spent + purchase.amount;
         } else {
-            people[person].owes[purchase.spender] = people[person].owes[purchase.spender] ? people[person].owes[purchase.spender] : 0 + (purchase.amount / peopleNames.length);
+            people[person].owes[purchase.spender] = people[person].owes[purchase.spender] ? people[person].owes[purchase.spender] : 0 + _.round((purchase.amount / peopleNames.length), 2);
             people[person].owes = people[person].owes ? people[person].owes : {};
         }
     })
@@ -53,14 +55,10 @@ function processMessage(message, people) {
     if(!message.text) throw new Error('no text message');
     const messageText = message.text;
 
-    console.log(message);
-    console.log(people);
     //Example message: "jesus is spent 100 dollars on food"
     if(/jesus\si\sspent\s(\d+((.)|(.\d{0,2})?))\sdollars\son.+/gmi.exec(messageText)?.length) {
-        console.log('calculating');
         const amountSpent = /jesus\si\sspent\s(\d+((.)|(.\d{0,2})?))\sdollars\son.+/gmi.exec(messageText)[1];
         const peopleRecord = balanceBills(divideBills({ spender: message.user, amount: Number(amountSpent) }, people));
-        console.log(peopleRecord);
         return {
             peopleRecord,
             reply: '',
