@@ -53,10 +53,14 @@ function processMessage(message, people) {
     if(!message.text) throw new Error('no text message');
     const messageText = message.text;
 
+    console.log(message);
+    console.log(people);
     //Example message: "jesus is spent 100 dollars on food"
     if(/jesus\si\sspent\s(\d+((.)|(.\d{0,2})?))\sdollars\son.+/gmi.exec(messageText)?.length) {
+        console.log('calculating');
         const amountSpent = /jesus\si\sspent\s(\d+((.)|(.\d{0,2})?))\sdollars\son.+/gmi.exec(messageText)[1];
         const peopleRecord = balanceBills(divideBills({ spender: message.user, amount: Number(amountSpent) }, people));
+        console.log(peopleRecord);
         return {
             peopleRecord,
             reply: '',
@@ -73,4 +77,8 @@ function processMessage(message, people) {
             gif: ''
         }
     }
+}
+
+module.exports = {
+    processMessage,
 }
