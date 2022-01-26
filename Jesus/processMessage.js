@@ -51,28 +51,28 @@ const regexMap = {
 }
 
 function processMessage(message, people) {
-    if(!message.user) throw new Error('no user');
+    console.log(message);
+    if(!message.from.first_name) throw new Error('no user');
     if(!message.text) throw new Error('no text message');
     const messageText = message.text;
 
     //Example message: "jesus is spent 100 dollars on food"
     if(/jesus\si\sspent\s(\d+((.)|(.\d{0,2})?))\sdollars\son.+/gmi.exec(messageText)?.length) {
         const amountSpent = /jesus\si\sspent\s(\d+((.)|(.\d{0,2})?))\sdollars\son.+/gmi.exec(messageText)[1];
-        const peopleRecord = balanceBills(divideBills({ spender: message.user, amount: Number(amountSpent) }, people));
+        const peopleRecord = balanceBills(divideBills({ spender: message.from.first_name, amount: Number(amountSpent) }, people));
         return {
             peopleRecord,
-            reply: '',
-            gif: ''
+            reply: `${message.from.first_name} spent ${amountSpent} dollars, and everyone else owes ${message.from.first_name} ${_.round((Number(amountSpent) / peopleRecord.length), 2)} dollars.`,
         }
     }
 
     //Example message: "jesus i cleared my bills"
     if(/jesus\si\scleared\smy\sbills/gmi.exec(messageText)?.length) {
-        const peopleRecord = clearBills(people, message.user);
+        const peopleRecord = clearBills(people, message.from.first_name);
         return {
             peopleRecord,
-            reply: '',
-            gif: ''
+            reply: `${message.from.first_name} cleared their bills.`,
+            gif: 'hurray'
         }
     }
 }
