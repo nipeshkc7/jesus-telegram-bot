@@ -46,10 +46,6 @@ function clearBills(peopleRecord, person) {
     return people;
 }
 
-const regexMap = {
-    'amountSpent': /jesus\si\sspent\s([0-9]+)\sdollars\son.+/gmi,
-}
-
 function processMessage(message, people) {
     console.log(message);
     if(!message.from.first_name) throw new Error('no user');
