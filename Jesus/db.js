@@ -1,3 +1,6 @@
+const docClient = new AWS.DynamoDB.DocumentClient();
+const tableName = process.env.TABLE_NAME;
+
 async function get(id) {
     const data = await docClient.get({
         TableName: tableName,

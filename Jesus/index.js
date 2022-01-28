@@ -1,7 +1,5 @@
 const axios = require('axios');
 const AWS = require('aws-sdk');
-const docClient = new AWS.DynamoDB.DocumentClient();
-const tableName = process.env.TABLE_NAME;
 const { processMessage } = require('./processMessage');
 const { get, upsert } = require('./db');
 
