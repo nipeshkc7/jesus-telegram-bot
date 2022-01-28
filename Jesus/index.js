@@ -55,7 +55,6 @@ async function addMembers(chatId, message) {
 exports.handler = async (event) => {
 
     const body = JSON.parse(event.body);
-    console.log(JSON.stringify(body, null, 2));
 
     if (body.message?.new_chat_members?.length) {
         await addMembers(body.message.chat.id, body.message);
@@ -73,7 +72,6 @@ exports.handler = async (event) => {
     }
 
     const group = await getItem(Math.abs(body.message.chat.id).toString());
-    console.log(`Updating existing group: ${JSON.stringify(group, null, 2)}`);
 
     if(!group) {
         return {
@@ -84,8 +82,15 @@ exports.handler = async (event) => {
 
     const processedMessage = processMessage(body.message, group.people);
 
-    if(processedMessage?.peopleRecords){
-        await update(Math.abs(body.message.chatId).toString(), processedMessage.peopleRecords);
+    if(!processedMessage) {
+        return {
+            statusCode: 200,
+            body: JSON.stringify('Nothing to do')
+        }
+    }
+
+    if(processedMessage?.peopleRecord){
+        await update(Math.abs(body.message.chat.id).toString(), {people: processedMessage.peopleRecord});
     }
 
     try {
