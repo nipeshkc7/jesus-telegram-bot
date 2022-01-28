@@ -42,14 +42,7 @@ async function addMembers(chatId, message) {
         }
     });
 
-    await docClient.put({
-        TableName: tableName,
-        Item: {
-            people: {...group},
-            id: Math.abs(chatId).toString(),
-        }
-    }).promise();
-
+    await update(Math.abs(chatId).toString(), { people: group });
 }
 
 exports.handler = async (event) => {
