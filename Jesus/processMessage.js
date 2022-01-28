@@ -58,7 +58,7 @@ function processMessage(message, people) {
         const peopleRecord = balanceBills(divideBills({ spender: message.from.first_name, amount: Number(amountSpent) }, people));
         return {
             peopleRecord,
-            reply: `${message.from.first_name} spent ${amountSpent} dollars, and everyone else owes ${message.from.first_name} ${_.round((Number(amountSpent) / peopleRecord.length), 2)} dollars.`,
+            reply: `${message.from.first_name} spent ${amountSpent} dollars, and everyone else owes ${message.from.first_name}, ${_.round((Number(amountSpent) / Object.keys(peopleRecord).length), 2)} dollars.`,
         }
     }
 

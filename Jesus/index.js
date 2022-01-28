@@ -8,7 +8,7 @@ async function getItem(id) {
     const data = await docClient.get({
         TableName: tableName,
         Key: {
-            id: id
+            'id': id
         }
     }).promise();
 
@@ -45,7 +45,7 @@ async function addMembers(chatId, message) {
     await docClient.put({
         TableName: tableName,
         Item: {
-            ...group,
+            people: {...group},
             id: Math.abs(chatId).toString(),
         }
     }).promise();
@@ -72,9 +72,17 @@ exports.handler = async (event) => {
         }
     }
 
-    const existingPeopleRecords = await getItem(Math.abs(body.message.chatId).toString());
+    const group = await getItem(Math.abs(body.message.chat.id).toString());
+    console.log(`Updating existing group: ${JSON.stringify(group, null, 2)}`);
 
-    const processedMessage = processMessage(body.message, existingPeopleRecords);
+    if(!group) {
+        return {
+            statusCode: 200,
+            body: JSON.stringify('No group found')
+        }
+    }
+
+    const processedMessage = processMessage(body.message, group.people);
 
     if(processedMessage?.peopleRecords){
         await update(Math.abs(body.message.chatId).toString(), processedMessage.peopleRecords);
