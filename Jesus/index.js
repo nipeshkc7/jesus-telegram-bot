@@ -1,5 +1,4 @@
 const axios = require('axios');
-const AWS = require('aws-sdk');
 const { processMessage } = require('./processMessage');
 const { get, upsert } = require('./db');
 
