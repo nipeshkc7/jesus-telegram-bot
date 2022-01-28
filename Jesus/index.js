@@ -4,7 +4,7 @@ const docClient = new AWS.DynamoDB.DocumentClient();
 const tableName = process.env.TABLE_NAME;
 const { processMessage } = require('./processMessage');
 
-async function getItem(id) {
+async function get(id) {
     const data = await docClient.get({
         TableName: tableName,
         Key: {
@@ -15,7 +15,7 @@ async function getItem(id) {
     return data.Item;
 }
 
-async function update(id, item) {
+async function upsert(id, item) {
     await docClient.put({
         TableName: tableName,
         Item: {
@@ -27,7 +27,7 @@ async function update(id, item) {
 
 async function addMembers(chatId, message) {
     const newChatMembers = message.new_chat_members;
-    const group = await getItem(Math.abs(chatId).toString()) ??
+    const group = await get(Math.abs(chatId).toString()) ??
         (message.from.is_bot === true ?
             {} : { [message.from.first_name]: { id: message.from.id, spent: 0, owes: {} } }
         );
@@ -42,7 +42,7 @@ async function addMembers(chatId, message) {
         }
     });
 
-    await update(Math.abs(chatId).toString(), { people: group });
+    await upsert(Math.abs(chatId).toString(), { people: group });
 }
 
 exports.handler = async (event) => {
@@ -64,7 +64,7 @@ exports.handler = async (event) => {
         }
     }
 
-    const group = await getItem(Math.abs(body.message.chat.id).toString());
+    const group = await get(Math.abs(body.message.chat.id).toString());
 
     if(!group) {
         return {
@@ -83,7 +83,7 @@ exports.handler = async (event) => {
     }
 
     if(processedMessage?.peopleRecord){
-        await update(Math.abs(body.message.chat.id).toString(), {people: processedMessage.peopleRecord});
+        await upsert(Math.abs(body.message.chat.id).toString(), {people: processedMessage.peopleRecord});
     }
 
     try {
