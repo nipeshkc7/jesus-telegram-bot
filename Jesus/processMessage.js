@@ -12,7 +12,7 @@ function divideBills(purchase, peopleRecord) {
         if (person === purchase.spender) {
             people[person].spent = people[person].spent + purchase.amount;
         } else {
-            people[person].owes[purchase.spender] = people[person].owes[purchase.spender] ? people[person].owes[purchase.spender] : 0 + _.round((purchase.amount / peopleNames.length), 2);
+            people[person].owes[purchase.spender] = (people[person].owes[purchase.spender] ? people[person].owes[purchase.spender] : 0) + _.round((purchase.amount / peopleNames.length), 2);
             people[person].owes = people[person].owes ? people[person].owes : {};
         }
     })
@@ -47,7 +47,6 @@ function clearBills(peopleRecord, person) {
 }
 
 function processMessage(message, people) {
-    console.log(message);
     if(!message.from.first_name) throw new Error('no user');
     if(!message.text) throw new Error('no text message');
     const messageText = message.text;
