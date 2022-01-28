@@ -4,7 +4,7 @@
   "description": "A telegram bot that helps you split you grocery bills.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -22,6 +22,10 @@
   "homepage": "https://github.com/nipeshkc7/jesus-telegram-bot#readme",
   "dependencies": {
     "aws-sdk": "^2.1062.0",
-    "axios": "^0.25.0"
+    "axios": "^0.25.0",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "jest": "^27.4.7"
   }
 }
