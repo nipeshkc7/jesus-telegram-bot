@@ -4,14 +4,15 @@ const { get, upsert } = require('./db');
 
 async function addMembers(chatId, message) {
     const newChatMembers = message.new_chat_members;
-    const group = await get(Math.abs(chatId).toString()) ??
+    const group = await get(Math.abs(chatId).toString());
+    const people = group?.people ??
         (message.from.is_bot === true ?
             {} : { [message.from.first_name]: { id: message.from.id, spent: 0, owes: {} } }
         );
 
     newChatMembers.forEach(member => {
-        if (!group[member.first_name]) {
-            group[member.first_name] = {
+        if (!people[member.first_name]) {
+            people[member.first_name] = {
                 id: member.id,
                 spent: 0,
                 owes: {}
@@ -19,7 +20,7 @@ async function addMembers(chatId, message) {
         }
     });
 
-    await upsert(Math.abs(chatId).toString(), { people: group });
+    await upsert(Math.abs(chatId).toString(), { people: people });
 }
 
 exports.handler = async (event) => {
