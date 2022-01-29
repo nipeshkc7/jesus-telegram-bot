@@ -103,7 +103,7 @@ describe('Testing message processing', () => {
                 },
                 text: 'jesus how much do i owe?'
             }, peopleOwed);
-            expect(result.reply).toEqual();
+            expect(result.reply).toMatchSnapshot();
         }
     )
 

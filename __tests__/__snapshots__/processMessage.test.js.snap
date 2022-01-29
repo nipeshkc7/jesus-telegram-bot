@@ -77,3 +77,9 @@ Object {
   },
 }
 `;
+
+exports[`Testing message processing should return correct reply for Bob 1`] = `"Bob owes:John 100 dollars,Mary 80 dollars,"`;
+
+exports[`Testing message processing should return correct reply for John 1`] = `"John owes:Mary 200 dollars,Bob 100 dollars,"`;
+
+exports[`Testing message processing should return correct reply for Mary 1`] = `"Mary owes:John 40 dollars,Bob 30 dollars,"`;
