@@ -4,7 +4,7 @@
   "description": "A telegram bot that helps you split you grocery bills.",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest --coverage"
   },
   "repository": {
     "type": "git",
