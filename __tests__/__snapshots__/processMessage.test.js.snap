@@ -1,0 +1,85 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing message processing should divide bills equally for Bob 1`] = `
+Object {
+  "Bob": Object {
+    "owes": Object {
+      "John": 0,
+      "Mary": 16.67,
+    },
+    "spent": 190,
+  },
+  "John": Object {
+    "owes": Object {
+      "Bob": 33.329999999999984,
+      "Mary": 160,
+    },
+    "spent": 100,
+  },
+  "Mary": Object {
+    "owes": Object {
+      "Bob": 0,
+      "John": 0,
+    },
+    "spent": 100,
+  },
+}
+`;
+
+exports[`Testing message processing should divide bills equally for John 1`] = `
+Object {
+  "Bob": Object {
+    "owes": Object {
+      "John": 100,
+      "Mary": 50,
+    },
+    "spent": 90,
+  },
+  "John": Object {
+    "owes": Object {
+      "Bob": 0,
+      "Mary": 60,
+    },
+    "spent": 400,
+  },
+  "Mary": Object {
+    "owes": Object {
+      "Bob": 0,
+      "John": 0,
+    },
+    "spent": 100,
+  },
+}
+`;
+
+exports[`Testing message processing should divide bills equally for Mary 1`] = `
+Object {
+  "Bob": Object {
+    "owes": Object {
+      "John": 0,
+      "Mary": 250,
+    },
+    "spent": 90,
+  },
+  "John": Object {
+    "owes": Object {
+      "Bob": 0,
+      "Mary": 360,
+    },
+    "spent": 100,
+  },
+  "Mary": Object {
+    "owes": Object {
+      "Bob": 0,
+      "John": 0,
+    },
+    "spent": 700,
+  },
+}
+`;
+
+exports[`Testing message processing should return correct reply for Bob 1`] = `"Bob owes:John 100 dollars,Mary 80 dollars,"`;
+
+exports[`Testing message processing should return correct reply for John 1`] = `"John owes:Mary 200 dollars,Bob 100 dollars,"`;
+
+exports[`Testing message processing should return correct reply for Mary 1`] = `"Mary owes:John 40 dollars,Bob 30 dollars,"`;

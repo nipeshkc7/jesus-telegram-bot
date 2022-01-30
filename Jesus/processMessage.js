@@ -46,6 +46,18 @@ function clearBills(peopleRecord, person) {
     return people;
 }
 
+function getOwed(people, person) {
+    if(Object.keys(people[person].owes).length === 0) {
+        return `You owe nobody. ${person} is free.`;
+    }
+
+    let msg = `${person} owes:`;
+    Object.keys(people[person].owes).forEach(personOwed => {
+        msg += `${personOwed} ${people[person].owes[personOwed]} dollars,`;
+    });
+    return msg;
+}
+
 function processMessage(message, people) {
     if(!message.from.first_name) throw new Error('no user');
     if(!message.text) throw new Error('no text message');
@@ -68,6 +80,15 @@ function processMessage(message, people) {
             peopleRecord,
             reply: `${message.from.first_name} cleared their bills.`,
             gif: 'hurray'
+        }
+    }
+
+    //Example message: "jesus how much do i owe"
+    if(/jesus\show\smuch\sdo\si\sowe?.+/gmi.exec(messageText)?.length) {
+        const msg = getOwed(people, message.from.first_name);
+        return {
+            people,
+            reply: msg,
         }
     }
 }
